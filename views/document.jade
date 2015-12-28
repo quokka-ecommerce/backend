@@ -1,3 +1,20 @@
 //
    Created by longNightKing on 12/19/15.
 
+extends layout
+
+block content
+    h2#tableName.sub-header= tableName
+    .table-responsive
+        table#tableBody.table.table-bordered
+            thead#tableHead
+                tr
+                    th ObjectID
+                        each value, key in tableSchema
+                            th= key + ' - ' + value
+            tbody#tableContent
+                each val in tableData
+                    tr
+                        each value in val
+                            td= value
+        button#addRow.btn.btn-lg.btn-primary(onclick="addRow()") Add Row

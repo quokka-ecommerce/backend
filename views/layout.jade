@@ -1,3 +1,70 @@
 //
    Created by longNightKing on 12/8/15.
-
+doctype html
+html(lang="en", ng-app="quokkaDBMS")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport",content="width=device-width, initial-scale=1")
+        meta(name="description",content="")
+        meta(name="author",content="")
+        link(rel="icon",href="../images/favicon.ico")
+        title= title
+        block styles
+            link(href="../bootstrap/dist/css/bootstrap.min.css", rel="stylesheet")
+            link(href="../bootstrap/dist/css/bootstrap-theme.min.css", rel="stylesheet")
+            link(href="../font-awesome/css/font-awesome.min.css", rel="stylesheet")
+            link(href='../css/dashboard.css', rel='stylesheet')
+            link(href='../css/table.css', rel='stylesheet')
+    body(data-spy="scroll",data-target=".scrollspy")
+        block body
+            nav.navbar.navbar-inverse.navbar-fixed-top
+                .container-fluid
+                    .navbar-header
+                        button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+                            span.sr-only Toggle navigation
+                            span.icon-bar
+                            span.icon-bar
+                            span.icon-bar
+                        a.navbar-brand(href='#/') Quokka DBMS
+                    #navbar.navbar-collapse.collapse
+                        ul.nav.navbar-nav.navbar-right
+                            li
+                                a(href='') YOUR ID
+                            li
+                                a(href='#') Logout
+                        //form.navbar-form.navbar-right
+                        //    input.form-control(type='text', placeholder='Search...')
+            .container-fluid
+                .row
+                    .col-sm-3.col-md-2.sidebar
+                        #accordion(role="navlist", aria-multiselectable="true", ng-controller="collectionsController as collections")
+                            #headingCollections(role="ultitle").active
+                                h4
+                                    a(data-toggle="collapse", data-parent="#accordion", href="#collections", aria-expanded="true", aria-controls="collections")
+                                        | Collections
+                            #collections.collapse(role="tlitems", aria-labelledby="headingCollections")
+                                ul#collectionList.nav.nav-sidebar
+                                    li(ng-repeat="collection in collections.list")
+                                        a(ng-href="#/table/{{collection}}") {{collection}}
+                            #headingAnalytics(role="ultitle")
+                                h4
+                                    a(data-toggle="collapse", data-parent="#accordion", href="#analytics", aria-expanded="true", aria-controls="analytics")
+                                        | Analysis
+                            #analytics.collapse(role="tlitems", aria-labelledby="headinganalytics")
+                                ul.nav.nav-sidebar
+                                    li
+                                        a(href='#') Overview
+                                    li
+                                        a(href='#') Sale
+                                    li
+                                        a(href='#') Product
+                    .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+                        div(ng-view)
+                        //block content
+            block scripts
+                script(src="../jquery/dist/jquery.min.js")
+                script(src="../bootstrap/dist/js/bootstrap.min.js")
+                script(src="../angular/angular.min.js")
+                script(src="../angular-route/angular-route.min.js")
+                script(src="../js/main.js")

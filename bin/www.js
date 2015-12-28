@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('HelloWorld:server');
+var debug = require('debug')('mongodb_node_ODM:server');
 var http = require('http');
 
 /**

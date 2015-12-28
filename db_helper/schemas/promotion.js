@@ -4,11 +4,14 @@
  */
 var Promotion = exports;
 var Schema = require('mongoose').Schema;
-var basicAttribute = require('./basic');
+var basic = require('./basic');
 
 Promotion.collection = 'promotion';
+Promotion.attribute = {
+    basic: 'Object'
+};
 Promotion.schema = new Schema({
-    basic: basicAttribute
+    basic: basic.schema
 }, {
     collection: Promotion.collection
 });

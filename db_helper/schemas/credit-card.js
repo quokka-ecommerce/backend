@@ -2,17 +2,26 @@
  * Define credit card schema here
  * Created by longNightKing on 12/10/15.
  */
-
+var CreditCard = exports;
 var Schema = require('mongoose').Schema;
-var basicAttribute = require('./basic');
+var basic = require('./basic');
 
-module.exports = new Schema({
-    basic: basicAttribute,
-    first_line: String,
-    second_line: String,
-    city: String,
-    state: String,
-    zip: Number
+CreditCard.collection = 'credit_card';
+CreditCard.attribute = {
+    name_on_card: 'String',
+    card_num: 'String',
+    safe_code: 'Number',
+    type: 'String',
+    expiration_date: 'Date',
+    basic: 'Object'
+};
+CreditCard.schema  = new Schema({
+    basic: basic.schema,
+    name_on_card: String,
+    card_num: Number,
+    safe_code: Number,
+    type: String,
+    expiration_date: {type: Date, min: Date.now}
 }, {
-    collection: 'address'
+    collection: CreditCard.collection
 });

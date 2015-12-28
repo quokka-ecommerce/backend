@@ -1,10 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div ng-controller="tableController as table">
+    <h2 id="tableName" class="sub-header">{{table.currentTableName}}</h2>
+    <div class="table-responsive">
+        <table id="tableBody" class="table table-bordered">
+            <thead id="tableHead">
+                <tr>
+                    <th>ObjectID</th>
+                    <th ng-repeat="(key, value) in table.currentSchema">{{key + ' '}}<small>{{value}}</small></th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody id="tableContent">
+                <tr ng-repeat="row in table.currentTableData">
+                    <td ng-repeat="data in row">{{data}}</td>
+                    <td><a href="" ng-click="table.edit(row)" data-toggle="modal" data-target="#editModal"><span class="glyphicon glyphicon-edit"></span></a></td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="" ng-click="table.addPendingRow()" data-toggle="modal" data-target="#addRowModal"><span class="glyphicon glyphicon-plus-sign"></span></a>
+    </div>
+    <div id="editModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:35px 50px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit document</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form ng-submit="table.save()" id="docEditForm" class="form-horizontal" role="form">
+                        <div class="form-group" ng-repeat="(key, value) in table.editingElem">
+                            <label class="col-sm-2 control-label">{{key}}</label>
+                            <div ng-if="$first" class="col-xs-10">
+                                <input class="form-control input-md" disabled ng-model="table.editingElem[key]">
+                            </div>
+                            <div ng-if="$last" class="col-xs-10">
+                                <textarea class="form-control" row="6" ng-model="table.editingElem[key]"></textarea>
+                            </div>
+                            <div ng-if="!$first && !$last" class="col-xs-10">
+                                <input class="form-control input-md" ng-model="table.editingElem[key]">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label sr-only">Edit Button</label>
+                        <div class="col-sm-10 pull-right">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" form="docEditForm" class="btn btn-primary btn-sm">Save</button>
+                            <button type="submit" class="btn btn-danger btn-sm" ng-click="table.delete()">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addRowModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:35px 50px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add document</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form ng-submit="table.add()" id="docAddForm" class="form-horizontal" role="form">
+                        <div class="form-group" ng-repeat="(key, value) in table.editingElem">
+                            <label class="col-sm-2 control-label">{{key}}</label>
+                            <div ng-if="$first" class="col-xs-10">
+                                <input class="form-control input-md" disabled ng-model="table.editingElem[key]">
+                            </div>
+                            <div ng-if="$last" class="col-xs-10">
+                                <textarea class="form-control" row="6" placeholder="{{value}}" ng-model="table.editingElem[key]" value=""></textarea>
+                            </div>
+                            <div ng-if="!$first && !$last" class="col-xs-10">
+                                <input class="form-control input-md" placeholder="{{value}}" ng-model="table.editingElem[key]" value="">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label sr-only">Edit Button</label>
+                        <div class="col-sm-10 pull-right">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" form="docAddForm" class="btn btn-primary btn-sm">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

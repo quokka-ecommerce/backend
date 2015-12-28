@@ -2,23 +2,24 @@
  * Created by longNightKing on 12/9/15.
  */
 var DBHelper = exports;
-DBHelper.dbUrl = 'mongodb://localhost/27017/test';
-
 var mongoose = require('mongoose'),
-    assert = require('assert');
-var Schema = mongoose.Schema,
+    assert = require('assert'),
+    Schema = mongoose.Schema,
+    User = require('./schemas/user'),
+    Address = require('./schemas/address'),
+    CreditCard = require('./schemas/credit-card'),
+    Conversation = require('./schemas/conversation'),
+    Employee = require('./schemas/employee'),
+    Order = require('./schemas/order'),
+    Product = require('./schemas/product'),
+    Promotion = require('./schemas/promotion'),
+    Sale = require('./schemas/sale'),
+    Vendor = require('./schemas/vendor'),
     TAG = 'DBHelper:';
 
-var defaultSchema = {
-    createAt: {type: Date, default: Date.now},
-    updateAt: Date,
-    acl: {
-        read: {type: Boolean, default: true},
-        write: {type: Boolean, default: true},
-        users: [Schema.ObjectId],
-        roles: [Schema.ObjectId]
-    }
-};
+var collectionList = [User, Address, CreditCard,
+    Conversation, Employee, Order, Product,
+    Promotion, Sale, Vendor];
 
 function connect(successCallBack){
     mongoose.connect(DBHelper.dbUrl);
@@ -38,65 +39,111 @@ function close(){
     console.log(TAG, 'db closed.');
 }
 
-DBHelper.getCollections = function (){
-    connect(function(){
-        mongoose.connection.db.listCollections().toArray(function(err, names){
-            if(err){
-                console.log(TAG, err);
-            }else{
-                names.forEach(function(collection) {
-                    console.log(TAG, collection.name);
-                });
-                collections = names;
-            }
-            close();
-        });
-    });
-}
-
-DBHelper.addCollection = function(name){
-    var ModelByName = mongoose.model(name, new Schema(defaultSchema, {collection: name}));
-    var aDoc = new ModelByName();
-    connect(function(){
-        aDoc.save(function(err){
-            close();
-            if (err){
-                console.error(TAG, err);
-            }else{
-                console.log(TAG, ' collection #' + name +'# add successfully.')
-            }
-        });
-    });
-}
-
-DBHelper.queryByCollectionName = function(name){
-    connect(function(){
-        var cursor = mongoose.connection.db.collection(name).find();
-        cursor.each(function(err, doc) {
-            assert.equal(err, null);
-            if (doc != null) {
-                console.dir(doc);
-            }
-        });
-        close();
-    });
-}
-
-DBHelper.isCollectionExist = function(name, callback){
-    connect(function(){
-        var potentialCollection = mongoose.connection.db.collection(name);
-        if(potentialCollection){
-            console.log(TAG, "#" + name + "# already exist.");
-        }else{
-            console.log(TAG, "#" + name + "# not exist.");
+function getSchemaInstanceByName(name){
+    console.log(TAG, "client wants " + name);
+    for(var i = 0; i < collectionList.length; i++){
+        if(name.localeCompare(collectionList[i].collection) == 0){
+            return collectionList[i];
         }
-        close();
-        callback(potentialCollection);
-    });
+    }
+    return undefined;
 }
 
+function getModelByCollection(name){
+    var schema = getSchemaInstanceByName(name).schema;
+    if(typeof schema === "undefined"){
+        return undefined;
+    }
+    return mongoose.model(name, schema);
+}
 
+DBHelper.dbUrl = 'mongodb://localhost/27017/test';
 
+DBHelper.getCollectionNameList = function(){
+    var list = [];
+    for(var i = 0; i < collectionList.length; i++){
+        list[list.length] = collectionList[i].collection;
+    }
+    return list;
+}
 
+DBHelper.getSchemaByName = function(name){
+    var schemaInstance = getSchemaInstanceByName(name);
+    if(typeof schemaInstance !== "undefined"){
+        return schemaInstance.attribute;
+    }
+    return undefined;
+}
 
+DBHelper.addOneDocToCollection = function(name, data, callback){
+    var ModelOfName = getModelByCollection(name);
+    if(typeof ModelOfName !== "undefined"){
+        var modelInstance = new ModelOfName(data);
+        connect(function() {
+            modelInstance.save(function (err) {
+                close();
+                if (err) {
+                    console.log(TAG, "doc of " + name + " add failed.");
+                    console.log(TAG, "error: " + err);
+                }
+                callback(err);
+            });
+        });
+    }else{
+        console.log(TAG, "collection: " + name + " not exist.");
+    }
+}
 
+DBHelper.removeOneDocFromCollection = function(name, query, callback){
+    var ModelOfName = getModelByCollection(name);
+    if(typeof ModelOfName !== "undefined"){
+        connect(function() {
+            ModelOfName.remove(query, function(err){
+                close();
+                if(err){
+                    console.log(TAG, "doc of " + name + " remove failed.");
+                    console.log(TAG, "error: " + err);
+                }
+                callback(err);
+            });
+        });
+    }else{
+        console.log(TAG, "collection: " + name + " not exist.");
+    }
+}
+
+DBHelper.updateOne = function(name, query, doc, options, callback){
+    var ModelOfName = getModelByCollection(name);
+    if(typeof ModelOfName !== "undefined"){
+        connect(function() {
+            ModelOfName.update(query, doc, options, function(err, raw){
+                close();
+                if(err){
+                    console.log(TAG, name + " update failed.");
+                    console.log(TAG, "error: " + err);
+                }
+                callback(err, raw);
+            });
+        });
+    }else{
+        console.log(TAG, "collection: " + name + " not exist.");
+    }
+}
+
+DBHelper.queryAllByCollectionName = function(name, callback){
+    var ModelOfName = getModelByCollection(name);
+    if(typeof ModelOfName !== "undefined"){
+        connect(function(){
+            ModelOfName.find({}, function(err, docs){
+                close();
+                if(err){
+                    console.log(TAG, name + " query all failed.");
+                    console.log(TAG, "error: " + err);
+                }
+                callback(err, docs);
+            });
+        });
+    }else{
+        console.log(TAG, "collection: " + name + " not exist.");
+    }
+};

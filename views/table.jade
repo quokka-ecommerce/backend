@@ -1,3 +1,22 @@
-//
-   Created by longNightKing on 12/15/15.
+extends layout
 
+block content
+    div(ng-controller="tableController as table")
+        h2#tableName.sub-header {{table.currentTableName}}
+        .table-responsive
+            table#tableBody.table.table-bordered
+                thead#tableHead
+                    tr
+                        th ObjectID
+                            th(ng-repeat="(key, value) in table.currentSchema") {{key + ' - '}}
+                                small {{value}}
+                            //each value, key in tableSchema
+                                th= key + ' - ' + value
+                tbody#tableContent
+                    tr(ng-repeat="row in table.currentTableData")
+                        td(ng-repeat="data in row") {{data}}
+                    //each val in tableData
+                        tr
+                            each value in val
+                                td= value
+            button#addRow.btn.btn-lg.btn-primary(onclick="addRow()") Add Row
