@@ -1,0 +1,26 @@
+{
+  "name": "mongodb_node_odm",
+  "description": "this is a mongoose based mongodb odm",
+  "main": "./bin/www.js",
+  "authors": [
+    "longnightking"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/quokka-ecommerce/mongodb_node_ODM",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "font-awesome": "~4.5.0",
+    "angular": "1.5.0-rc.0",
+    "angular-route": "~1.4.8"
+  }
+}
