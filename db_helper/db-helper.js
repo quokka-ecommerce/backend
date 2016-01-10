@@ -57,7 +57,7 @@ function getModelByCollection(name){
     return mongoose.model(name, schema);
 }
 
-DBHelper.dbUrl = 'mongodb://localhost/27017/test';
+DBHelper.dbUrl = 'mongodb://localhost:27017/test';
 
 DBHelper.getCollectionNameList = function(){
     var list = [];

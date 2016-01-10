@@ -8,7 +8,7 @@ var basic = require('./basic');
 
 Product.collection = 'product';
 Product.attribute = {
-    name: 'String',
+    product_name: 'String',
     upc: 'String',
     category_l1: 'String',
     category_l2: 'String',
@@ -16,21 +16,21 @@ Product.attribute = {
     unit: 'String',
     unit_num: 'Number',
     brand: 'String',
-    production_place: 'String',
+    original_country: 'String',
     current_price: 'Number',
-    stock: 'Number',
-    detail: 'String',
+    current_stock: 'Number',
+    product_description: 'String',
     vendor_id: 'String',
     history_price: 'Number',
-    attribute: 'Object',
-    review_list: 'Array',
-    img_links: 'Array',
+    attributes: 'Array',
+    reviews: 'Array',
+    img_links: 'String',
     sale_id: 'Array',
     basic: 'Object'
 };
 Product.schema = new Schema({
     basic: basic.schema,
-    name: String,
+    product_name: String,
     upc: String,
     category_l1: String,
     category_l2: String,
@@ -38,24 +38,16 @@ Product.schema = new Schema({
     unit: String,
     unit_num: Number,
     brand: String,
-    production_place: String,
+    original_country: String,
     current_price: Number,
-    stock: Number,
-    detail: String,
+    current_stock: Number,
+    product_description: String,
     vendor_id: String,
     history_price: Number,
     sale_id: [String],
-    img_links: [String],
-    review_list: [{
-      userId: String,
-      content: String,
-      stars: Number
-    }],
-    attribute: {
-        color:[String],
-        type: String,
-        flavor: String
-    }
+    img_links: String,
+    reviews: [String],
+    attributes: [String]
 }, {
     collection: Product.collection
 });
