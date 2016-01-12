@@ -22,16 +22,15 @@ Product.attribute = {
     product_description: 'String',
     vendor_id: 'String',
     history_price: 'Number',
+    img_links: 'String',
     attributes: 'Array',
     reviews: 'Array',
-    img_links: 'String',
     sale_id: 'Array',
     basic: 'Object'
 };
 Product.schema = new Schema({
     basic: basic.schema,
     sale_id: [String],
-    img_links: String,
     reviews: [String],
     attributes: [String],
     product_name: String,
@@ -47,7 +46,8 @@ Product.schema = new Schema({
     current_stock: Number,
     product_description: String,
     vendor_id: String,
-    history_price: Number
+    history_price: Number,
+    img_links: String
 }, {
     collection: Product.collection
 });
