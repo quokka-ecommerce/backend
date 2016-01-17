@@ -4,7 +4,7 @@
 
 var express = require('express');
 var router = express.Router();
-var DBHelper = require('../db_helper/db-helper');
+var DBHelper = require('quokka-dao-nodejs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,8 +12,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/collections', function(req, res) {
+    var collectionList = DBHelper.getCollectionNameList();
     res.writeHead(200, {"Content-Type": "application/json"});
-    res.end(JSON.stringify(DBHelper.getCollectionNameList()));
+    res.end(JSON.stringify(collectionList));
 });
 
 router.get('/table/:name', function(req, res) {
