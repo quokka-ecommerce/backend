@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('mongodb_node_ODM:server');
 var http = require('http');
+var DBhelper = require('quokka-dao-nodejs');
+var Config = require('../config');
 
 /**
  * Get port from environment and store in Express.
@@ -28,7 +30,8 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
+DBhelper.connectDB(Config.dbURL);
+process.on('exit', clearUp);
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -87,4 +90,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+function clearUp(){
+  DBhelper.closeDB();
 }
