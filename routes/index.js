@@ -51,7 +51,7 @@ router.post('/table/:name', function(req, res) {
     var isTimeOut = true;
     var docData = req.body;
     var docId = docData._id;
-    delete docData._id;
+    //delete docData._id;
     if(docId){
         DBHelper.updateOne(name, {_id: docId}, docData, function(err, raw){
             if(!err){

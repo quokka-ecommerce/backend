@@ -4,14 +4,14 @@
         <table id="tableBody" class="table table-bordered">
             <thead id="tableHead">
                 <tr>
-                    <th>ObjectID</th>
+                    <th ng-show="!table.currentSchema.hasOwnProperty('_id')">_id <small>String</small></th>
                     <th ng-repeat="(key, value) in table.currentSchema">{{key + ' '}}<small>{{value}}</small></th>
                     <th>Edit</th>
                 </tr>
             </thead>
             <tbody id="tableContent">
                 <tr ng-repeat="row in table.currentTableData">
-                    <td>{{row._id}}</td>
+                    <td ng-show="!table.currentSchema.hasOwnProperty('_id')">{{row._id}}</td>
                     <td ng-repeat="(key, value) in table.currentSchema">{{row[key]}}</td>
                     <td><a href="" ng-click="table.edit(row)" data-toggle="modal" data-target="#editModal"><span class="glyphicon glyphicon-edit"></span></a></td>
                 </tr>
