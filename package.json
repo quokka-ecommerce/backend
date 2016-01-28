@@ -27,7 +27,6 @@
     "jade-bootstrap": "^1.0.1",
     "morgan": "^1.6.1",
     "path": "^0.12.7",
-    "serve-favicon": "^2.3.0",
-    "quokka-dao-nodejs": "^0.0.1"
+    "serve-favicon": "^2.3.0"
   }
 }
